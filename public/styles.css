@@ -42,7 +42,7 @@ button:hover {
     border-radius: 5px;
     padding: 10px;
     overflow-y: scroll;
-    background-color: black;
+    background-color: green;
 }
 
 .message {
