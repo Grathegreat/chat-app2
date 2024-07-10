@@ -1,4 +1,3 @@
-const fs = require('fs');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -7,28 +6,13 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-const users = {}; // Object to store usernames
-const usersFilePath = 'users.txt'; // File to store active users
-
 app.use(express.static('public'));
-
-// Load initial list of users from file if exists
-let activeUsers = [];
-if (fs.existsSync(usersFilePath)) {
-    activeUsers = fs.readFileSync(usersFilePath, 'utf8').trim().split('\n');
-}
 
 io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
-        const username = users[socket.id];
-        if (username) {
-            delete users[socket.id];
-            io.emit('user left', username);
-            updateUsersFile();
-        }
     });
 
     socket.on('chat message', (msg) => {
@@ -36,35 +20,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('user joined', (username) => {
-        if (!isUsernameAvailable(username)) {
-            socket.emit('username taken', username);
-            return;
-        }
-
-        users[socket.id] = username;
         io.emit('user joined', username);
-        activeUsers.push(username);
-        updateUsersFile();
-    });
-
-    // Send active users list to client when requested
-    socket.on('get active users', () => {
-        socket.emit('active users list', activeUsers);
     });
 });
-
-function isUsernameAvailable(username) {
-    for (let socketId in users) {
-        if (users[socketId] === username) {
-            return false;
-        }
-    }
-    return true;
-}
-
-function updateUsersFile() {
-    fs.writeFileSync(usersFilePath, activeUsers.join('\n'));
-}
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
