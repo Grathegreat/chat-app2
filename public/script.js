@@ -24,7 +24,7 @@ socket.on('chat message', (msg) => {
 });
 
 socket.on('user joined', (username) => {
-    addNotification(`${username} joined the chat room.`);
+    addNotification(`${username} JOIN THE CHAT ROOM`);
 });
 
 function addMessage(msg) {
