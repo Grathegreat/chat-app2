@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -7,9 +8,16 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const users = {}; // Object to store usernames
-const inappropriateWords = ['fuck', 'nigger', 'nigga', 'iyot']; // Example list of inappropriate words
+const inappropriateWords = ['bastos', 'badword', 'offensive']; // Example list of inappropriate words
+const usersFilePath = 'users.txt'; // File to store active users
 
 app.use(express.static('public'));
+
+// Load initial list of users from file if exists
+let activeUsers = [];
+if (fs.existsSync(usersFilePath)) {
+    activeUsers = fs.readFileSync(usersFilePath, 'utf8').trim().split('\n');
+}
 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -20,6 +28,7 @@ io.on('connection', (socket) => {
         if (username) {
             delete users[socket.id];
             io.emit('user left', username);
+            updateUsersFile();
         }
     });
 
@@ -44,6 +53,13 @@ io.on('connection', (socket) => {
 
         users[socket.id] = username;
         io.emit('user joined', username);
+        activeUsers.push(username);
+        updateUsersFile();
+    });
+
+    // Send active users list to client when requested
+    socket.on('get active users', () => {
+        socket.emit('active users list', activeUsers);
     });
 });
 
@@ -82,8 +98,13 @@ function handleInappropriateMessage(socket) {
         delete users[socket.id];
         socket.emit('message removed', 'Your message contained inappropriate content.');
         io.emit('user left', username);
+        updateUsersFile();
     }
     socket.disconnect(true);
+}
+
+function updateUsersFile() {
+    fs.writeFileSync(usersFilePath, activeUsers.join('\n'));
 }
 
 const PORT = process.env.PORT || 3000;
