@@ -42,7 +42,8 @@ button:hover {
     border-radius: 5px;
     padding: 10px;
     overflow-y: scroll;
-    background-color: green;
+    background-image: url('images (2).jpeg');
+    background-size: cover;
 }
 
 .message {
