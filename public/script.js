@@ -22,10 +22,11 @@ socket.on('user joined', (username) => {
     addNotification(`${username} joined the chat room.`);
 });
 
-socket.on('username taken', (username) => {
-    alert(`Username "${username}" is already taken. Please choose a different username.`);
+socket.on('username', (username) => {
+    addNotification(`welcome`);
     // Optionally, clear the input field or prompt the user to enter a new username
 });
+
 socket.on('inappropriate username', (username) => {
     alert(`Username "${username}" is inappropriate. Please choose a different username.`);
     // Optionally, clear the input field or prompt the user to enter a new username
@@ -38,6 +39,16 @@ socket.on('message removed', (reason) => {
 
 socket.on('user left', (username) => {
     addNotification(`${username} left the chat room.`);
+});
+
+// Example function to request and display active users list
+function displayActiveUsers() {
+    socket.emit('get active users');
+}
+
+socket.on('active users list', (users) => {
+    console.log('Active users:', users);
+    // Display or update UI with active users list
 });
 
 function addNotification(message) {
