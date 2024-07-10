@@ -8,7 +8,6 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const users = {}; // Object to store usernames
-const inappropriateWords = ['bastos', 'badword', 'offensive']; // Example list of inappropriate words
 const usersFilePath = 'users.txt'; // File to store active users
 
 app.use(express.static('public'));
@@ -33,21 +32,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on('chat message', (msg) => {
-        if (containsInappropriateWord(msg)) {
-            handleInappropriateMessage(socket);
-        } else {
-            io.emit('chat message', msg);
-        }
+        io.emit('chat message', msg);
     });
 
     socket.on('user joined', (username) => {
         if (!isUsernameAvailable(username)) {
             socket.emit('username taken', username);
-            return;
-        }
-
-        if (isInappropriateUsername(username)) {
-            socket.emit('inappropriate username', username);
             return;
         }
 
@@ -70,37 +60,6 @@ function isUsernameAvailable(username) {
         }
     }
     return true;
-}
-
-function isInappropriateUsername(username) {
-    const lowerUsername = username.toLowerCase();
-    for (let word of inappropriateWords) {
-        if (lowerUsername.includes(word)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function containsInappropriateWord(message) {
-    const lowerMessage = message.toLowerCase();
-    for (let word of inappropriateWords) {
-        if (lowerMessage.includes(word)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function handleInappropriateMessage(socket) {
-    const username = users[socket.id];
-    if (username) {
-        delete users[socket.id];
-        socket.emit('message removed', 'Your message contained inappropriate content.');
-        io.emit('user left', username);
-        updateUsersFile();
-    }
-    socket.disconnect(true);
 }
 
 function updateUsersFile() {
