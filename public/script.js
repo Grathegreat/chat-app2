@@ -22,6 +22,10 @@ socket.on('user joined', (username) => {
     addNotification(`${username} joined the chat room.`);
 });
 
+socket.on('username taken', (username) => {
+    alert(`Username "${username}" is already taken. Please choose a different username.`);
+    // Optionally, clear the input field or prompt the user to enter a new username
+});
 socket.on('inappropriate username', (username) => {
     alert(`Username "${username}" is inappropriate. Please choose a different username.`);
     // Optionally, clear the input field or prompt the user to enter a new username
