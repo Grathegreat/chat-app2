@@ -22,19 +22,10 @@ socket.on('user joined', (username) => {
     addNotification(`${username} joined the chat room.`);
 });
 
-socket.on('username', (username) => {
-    addNotification(`welcome`);
+socket.on('username taken', (username) => {
+    alert(`Username "${username}" is already taken. Please choose a different username.`);
     // Optionally, clear the input field or prompt the user to enter a new username
-});
-
-socket.on('inappropriate username', (username) => {
-    alert(`Username "${username}" is inappropriate. Please choose a different username.`);
-    // Optionally, clear the input field or prompt the user to enter a new username
-});
-
-socket.on('message removed', (reason) => {
-    alert(`Your message was removed: ${reason}`);
-    // Optionally, update UI or inform the user why their message was removed
+    // Example: document.getElementById('username').value = '';
 });
 
 socket.on('user left', (username) => {
