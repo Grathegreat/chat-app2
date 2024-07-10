@@ -5,42 +5,41 @@ let username = '';
 function joinChat() {
     username = document.getElementById('username').value.trim();
     if (username) {
-        document.getElementById('joinScreen').style.display = 'none';
-        document.getElementById('chatScreen').style.display = 'flex';
         socket.emit('user joined', username);
     }
 }
 
 function sendMessage() {
-    const message = document.getElementById('messageInput').value.trim();
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
     if (message) {
-        socket.emit('chat message', `${username}: ${message}`);
-        document.getElementById('messageInput').value = '';
+        socket.emit('chat message', message);
+        messageInput.value = ''; // Clear the input field after sending message
     }
 }
-
-socket.on('chat message', (msg) => {
-    addMessage(msg);
-});
 
 socket.on('user joined', (username) => {
     addNotification(`${username} joined the chat room.`);
 });
 
-function addMessage(msg) {
-    const chatBox = document.getElementById('chatBox');
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message');
-    messageElement.innerText = msg;
-    chatBox.appendChild(messageElement);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
+socket.on('inappropriate username', (username) => {
+    alert(`Username "${username}" is inappropriate. Please choose a different username.`);
+    // Optionally, clear the input field or prompt the user to enter a new username
+});
 
-function addNotification(notification) {
+socket.on('message removed', (reason) => {
+    alert(`Your message was removed: ${reason}`);
+    // Optionally, update UI or inform the user why their message was removed
+});
+
+socket.on('user left', (username) => {
+    addNotification(`${username} left the chat room.`);
+});
+
+function addNotification(message) {
     const chatBox = document.getElementById('chatBox');
-    const notificationElement = document.createElement('div');
-    notificationElement.classList.add('notification');
-    notificationElement.innerText = notification;
-    chatBox.appendChild(notificationElement);
-    chatBox.scrollTop = chatBox.scrollHeight;
-        }
+    const notification = document.createElement('div');
+    notification.classList.add('notification');
+    notification.textContent = message;
+    chatBox.appendChild(notification);
+}
