@@ -1,15 +1,15 @@
 {
-  "name": "nodejs",
+  "name": "chat-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@types/node": "^18.0.6"
-  }
+    "express": "^4.17.1",
+    "socket.io": "^4.0.1"
+  },
+  "author": "",
+  "license": "ISC"
 }
