@@ -1,58 +1,118 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f4f4;
 }
 
-#joinScreen, #chatScreen {
+.centered-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#username, #messageInput {
+#chat {
+    width: 90%;
+    max-width: 600px;
+}
+
+#chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.messages-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
     padding: 10px;
-    margin: 10px 0;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #28a745;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-#chatBox {
-    width: 300px;
-    height: 400px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    overflow-y: scroll;
-    background-image: url('images (2).jpeg');
-    background-size: cover;
+    background: #e0e0e0;
+    border-radius: 10px;
 }
 
 .message {
-    padding: 5px;
-    margin: 5px 0;
-    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
 }
 
-.notification {
-    color: #777;
-    font-style: italic;
+.message img.profile-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-message {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+}
+
+.other-message {
+    background-color: #e0e0e0;
+    color: black;
+    align-self: flex-start;
+}
+
+.notification-message {
+    background-color: #ffeb3b;
+    color: black;
+    text-align: center;
+    width: 100%;
+}
+
+.input {
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(100% - 22px);
+}
+
+.btn {
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+audio {
+    max-width: 100%;
+}
+
+#profile-picture-input,
+.hidden {
+    display: none;
+}
+
+#chat-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
